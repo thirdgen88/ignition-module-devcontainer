@@ -1,0 +1,83 @@
+plugins {
+    base
+    // the ignition module plugin: https://github.com/inductiveautomation/ignition-module-tools
+    id("io.ia.sdk.modl") version("0.1.1")
+}
+
+allprojects {
+    version = "1.0.0"
+    group = "{{ project_organization }}"
+}
+
+extra["sdkVersion"] = "8.1.20"
+
+ignitionModule {
+    // name of the .modl file to build
+    fileName.set("{{ module_id_suffix }}")
+
+    // module xml configuration
+    name.set("{{ module_id_suffix }}")
+    id.set("{{ project_organization }}.{{ module_id_suffix }}")
+    moduleVersion.set("${project.version}")
+    moduleDescription.set("{{ project_description }}")
+    requiredIgnitionVersion.set("{{ required_ignition_version}}")
+    requiredFrameworkVersion.set("{{ required_framework_version }}")
+    // says 'this module is free, does not require licensing'.  Defaults to false, delete for commercial modules.
+    freeModule.set(true)
+//    license.set("license.html")
+    applyInductiveArtifactRepo.set(true)
+
+    // If we depend on other module being loaded/available, then we specify IDs of the module we depend on,
+    // and specify the Ignition Scope that applies. "G" for gateway, "D" for designer, "C" for VISION client
+    // (this module does not run in the scope of a Vision client, so we don't need a "C" entry here)
+    moduleDependencies.set(emptyMap())
+
+    // map of 'Gradle Project Path' to Ignition Scope in which the project is relevant.  This is combined with
+    // the dependency declarations within the subproject's build.gradle.kts in order to determine which
+    // dependencies need to be bundled with the module and added to the module.xml.
+    projectScopes.putAll(
+        mapOf(
+            ":gateway" to "G",
+            ":web" to "G",
+            ":designer" to "D",
+            ":common" to "GD"
+        )
+    )
+
+    // 'hook classes' are the things that Ignition loads and runs when your module is installed.  This map tells
+    // Ignition which classes should be loaded in a given scope.
+    hooks.putAll(
+        mapOf(
+            "{{ project_organization }}.gateway.{{ module_hook_prefix }}GatewayHook" to "G",
+            "{{ project_organization }}.designer.{{ module_hook_prefix }}DesignerHook" to "D"
+        )
+    )
+
+    /*
+     * Optional unsigned modl settings. If true, modl signing will be skipped. This is not for production and should
+     * be used merely for development testing
+     */
+    skipModlSigning.set(true)
+}
+
+// target gateway URL to our Compose sidecar
+tasks.deployModl {
+    hostGateway.set("http://gateway:8088")
+}
+
+// setup custom formatter for build number
+plugins.withId("io.ia.sdk.modl") {
+    val formatter: java.time.format.DateTimeFormatter = java.time.format.DateTimeFormatter.ofPattern("YYYYMMddkk")
+    val dateString: String = java.time.LocalDateTime.now().format(formatter)
+    val modlExtension = project.extensions.findByType(io.ia.sdk.gradle.modl.extension.ModuleSettings::class)
+    val effectiveVersion = "${project.version}.$dateString"
+    modlExtension?.moduleVersion?.set(effectiveVersion)
+}
+
+val deepClean by tasks.registering {
+    dependsOn(allprojects.map { "${it.path}:clean" })
+    description = "Executes clean tasks and remove node plugin caches."
+    doLast {
+        delete(file(".gradle"))
+    }
+}

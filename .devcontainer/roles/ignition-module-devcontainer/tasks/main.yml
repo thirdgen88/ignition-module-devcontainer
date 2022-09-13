@@ -1,0 +1,59 @@
+- name: Check on `.gradle` folder presence
+  ansible.builtin.stat:
+    path: "{{ workspace_root }}/.gradle"
+  register: gradle_stat
+
+- name: No-op when .gradle exists
+  ansible.builtin.meta: end_play
+  when: gradle_stat.stat.exists
+
+- name: Template Gradle Settings File
+  ansible.builtin.template:
+    src: settings.gradle.kts.j2
+    dest: "{{ workspace_root }}/settings.gradle.kts"
+    mode: 0644
+    owner: vscode
+    group: vscode
+
+- name: Template Gradle Build File
+  ansible.builtin.template:
+    src: build.gradle.kts.j2
+    dest: "{{ workspace_root }}/build.gradle.kts"
+    mode: 0644
+    owner: vscode
+    group: vscode
+
+- name: Create Sources Scaffolding
+  ansible.builtin.file:
+    path: "{{ workspace_root }}/{{ item[0] }}/src/{{ item[1] }}/{{ item[2] }}/{{ item[0] }}"
+    state: directory
+    mode: 0755
+    owner: vscode
+    group: vscode
+  with_nested:
+    - [ "common", "designer", "gateway" ]
+    - [ "main", "test" ]
+    - [ "java/{{ project_organization | replace('.', '/') }}" ]
+
+- name: Create Resources Scaffolding
+  ansible.builtin.file:
+    path: "{{ workspace_root }}/{{ item[0] }}/src/{{ item[1] }}/resources"
+    state: directory
+    mode: 0755
+    owner: vscode
+    group: vscode
+  with_nested:
+    - [ "common", "designer", "gateway" ]
+    - [ "main", "test" ]
+
+- name: Template out Hook Classes
+  ansible.builtin.template:
+    src: "{{ scope }}Hook.java.j2"
+    dest: "{{ workspace_root }}/{{ scope }}/src/main/java/{{ project_organization | replace('.', '/') }}/{{ scope }}/{{ module_hook_prefix }}{{ scope | title }}Hook.java"
+    mode: 0644
+    owner: vscode
+    group: vscode
+  loop:
+    - "gateway"
+  loop_control:
+    loop_var: scope

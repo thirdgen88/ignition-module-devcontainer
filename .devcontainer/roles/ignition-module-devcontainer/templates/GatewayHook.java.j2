@@ -1,0 +1,57 @@
+package {{ project_organization }}.gateway;
+
+import com.inductiveautomation.ignition.common.licensing.LicenseState;
+import com.inductiveautomation.ignition.gateway.model.AbstractGatewayModuleHook;
+import com.inductiveautomation.ignition.gateway.model.GatewayContext;
+
+@SuppressWarnings("unused")
+public class {{ module_hook_prefix}}GatewayHook extends AbstractGatewayModuleHook {
+    private volatile GatewayContext context;
+
+    /**
+     * Called to before startup. This is the chance for the module to add its extension points and update persistent
+     * records and schemas. None of the managers will be started up at this point, but the extension point managers will
+     * accept extension point types.
+     */
+    @Override
+    public void setup(GatewayContext gatewayContext) {
+        this.context = gatewayContext;
+    }
+
+    /**
+     * Called to initialize the module. Will only be called once. Persistence interface is available, but only in
+     * read-only mode.
+     */
+    @Override
+    public void startup(LicenseState licenseState) {
+        // no-op
+    }
+
+    /**
+     * Called to shutdown this module. Note that this instance will never be started back up - a new one will be created
+     * if a restart is desired
+     */
+    @Override
+    public void shutdown() {
+        // no-op
+    }
+
+    /**
+     * @return {@code true} if this is a "free" module, i.e. it does not participate in the licensing system. This is
+     *         equivalent to the now defunct FreeModule attribute that could be specified in module.xml.
+     */
+    @Override
+    public boolean isFreeModule() {
+        return true;
+    }
+
+    /**
+     * @return {@code true} if this module opts-in to participating in Ignition Maker Edition. Default is
+     * {@code false}. If you override this and return true, your module will become activated when running in
+     * a Maker Edition installation.
+     */
+    @Override
+    public boolean isMakerEditionCompatible() {
+        return true;
+    }
+}

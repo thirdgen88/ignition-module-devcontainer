@@ -1,0 +1,8 @@
+project_name: ignition-module-devcontainer
+project_description: A module that works with the Ignition Platform
+project_organization: org.example
+module_id_suffix: SampleModule
+module_hook_prefix: Sample
+workspace_root: /workspace
+required_ignition_version: 8.1.13
+required_framework_version: 8

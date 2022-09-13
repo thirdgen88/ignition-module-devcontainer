@@ -1,0 +1,4 @@
+- name: Setup Ignition Module devcontainer
+  hosts: localhost
+  roles:
+  - ignition-module-devcontainer

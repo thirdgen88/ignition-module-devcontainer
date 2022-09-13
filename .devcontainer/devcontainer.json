@@ -1,0 +1,75 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.245.0/containers/java
+{
+	"name": "Java",
+
+	"dockerComposeFile": [
+		"docker-compose.yml"
+	],
+
+	"service": "devcontainer",
+
+	"workspaceFolder": "/workspace",
+
+	"runServices": [
+		"gateway"
+	],
+
+	"hostRequirements": {
+		"cpus": 2,
+		"memory": "4gb",
+		"storage": "8gb"
+	},
+
+	// Configure tool-specific properties.
+	"customizations": {
+		// Configure properties specific to VS Code.
+		"vscode": {
+			// Set *default* container specific settings.json values on container create.
+			"settings": { 
+				"java.import.gradle.wrapper.enabled": true,
+				"java.import.gradle.home": "/workspace",
+				// Java 17 used for the Java VSCode Language Server and Extensions
+				"java.jdt.ls.java.home": "/usr/lib/jvm/msopenjdk-17",
+				"java.configuration.runtimes": [
+					// Java 11 used for Ignition Module Build
+					{
+						"name": "JavaSE-11",
+						"path": "/usr/local/sdkman/candidates/java/current",
+						"default": true
+					}
+				]
+			},
+			
+			// Add the IDs of extensions you want installed when the container is created.
+			"extensions": [
+				"vscjava.vscode-java-pack",
+				"vscjava.vscode-gradle",
+				"sonarsource.sonarlint-vscode",
+				"shengchen.vscode-checkstyle",
+				"mathiasfrohlich.kotlin",
+				// "k--kato.intellij-idea-keybindings",
+				"ms-azuretools.vscode-docker",
+				"redhat.ansible"
+			]
+		}
+	},
+
+	"portsAttributes": {
+		"18088": {
+			"label": "Ignition Gateway"
+		}
+	},
+
+	"otherPortsAttributes": {
+		"onAutoForward": "ignore"
+	},
+
+	"onCreateCommand": "ansible-playbook .devcontainer/setup-devcontainer.yml",
+
+	"remoteUser": "vscode",
+	
+	"features": {
+		"docker-from-docker": "latest"
+	}
+}

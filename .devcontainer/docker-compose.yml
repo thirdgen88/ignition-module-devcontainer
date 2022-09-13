@@ -1,0 +1,47 @@
+---
+services:
+  devcontainer:
+    build:
+      context: .
+      args:
+        # Update the VARIANT arg to pick a Java version: 11, 17
+        # Append -bullseye or -buster to pin to an OS version.
+        # Use the -bullseye variants on local arm64/Apple Silicon.
+        VARIANT: "17-bullseye"
+        # Options
+        INSTALL_GRADLE: "true"
+        GRADLE_VERSION: "7.5.1"
+        INSTALL_JAVA: "true"
+        JAVA_VERSION: "11"
+        NODE_VERSION: "lts/*"
+    volumes:
+      # Mounts the project folder to '/workspace'. While this file is in .devcontainer,
+      # mounts are relative to the first file in the list, which is a level up.
+      - ..:/workspace:cached
+      - devcontainer-extensions:/home/vscode/.vscode-server/extensions
+    environment:
+      GRADLE_USER_HOME: "/workspace/.gradle"
+    # Overrides default command so things don't shut down after the process ends.
+    command: /bin/sh -c "while sleep 1000; do :; done"
+
+  gateway:
+    image: inductiveautomation/ignition:8.1.20
+    ports:
+      - 18088:8088
+      - 18000:8000
+    environment:
+      GATEWAY_ADMIN_PASSWORD: password
+      IGNITION_EDITION: standard
+      ACCEPT_IGNITION_EULA: "Y"
+    volumes:
+      - gateway-data:/usr/local/bin/ignition/data
+    command: >
+      -n Ignition-module-dev
+      -d
+      --
+      -Dignition.allowunsignedmodules=true
+      -Dia.developer.moduleupload=true
+
+volumes:
+  gateway-data:
+  devcontainer-extensions:
