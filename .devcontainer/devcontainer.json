@@ -50,7 +50,8 @@
 				"mathiasfrohlich.kotlin",
 				// "k--kato.intellij-idea-keybindings",
 				"ms-azuretools.vscode-docker",
-				"redhat.ansible"
+				"redhat.ansible",
+				"redhat.java"
 			]
 		}
 	},
