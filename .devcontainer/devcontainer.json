@@ -56,11 +56,9 @@
 		}
 	},
 
-	"portsAttributes": {
-		"18088": {
-			"label": "Ignition Gateway"
-		}
-	},
+	"forwardPorts": [
+		"gateway:8088"
+	],
 
 	"otherPortsAttributes": {
 		"onAutoForward": "ignore"
