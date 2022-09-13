@@ -48,7 +48,7 @@
 
 - name: Template out Hook Classes
   ansible.builtin.template:
-    src: "{{ scope }}Hook.java.j2"
+    src: "{{ scope | title }}Hook.java.j2"
     dest: "{{ workspace_root }}/{{ scope }}/src/main/java/{{ project_organization | replace('.', '/') }}/{{ scope }}/{{ module_hook_prefix }}{{ scope | title }}Hook.java"
     mode: 0644
     owner: vscode
