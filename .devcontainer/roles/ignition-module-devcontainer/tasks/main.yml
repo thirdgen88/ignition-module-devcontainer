@@ -1,11 +1,19 @@
-- name: Check on `.gradle` folder presence
+- name: Check on marker file presence
   ansible.builtin.stat:
-    path: "{{ workspace_root }}/.gradle"
-  register: gradle_stat
+    path: "{{ initialization_marker_filepath }}"
+  register: marker_file
 
-- name: No-op when .gradle exists
+- name: No-op when marker file exists
   ansible.builtin.meta: end_play
-  when: gradle_stat.stat.exists
+  when: marker_file.stat.exists
+
+- name: Place Marker file
+  ansible.builtin.copy:
+    content: '# This file prevents the templating from re-occuring on future container launches'
+    dest: "{{ initialization_marker_filepath }}"
+    mode: 0644
+    owner: "{{ devcontainer_user }}"
+    group: "{{ devcontainer_group }}"
 
 - name: Template Gradle Settings File
   ansible.builtin.template:
@@ -31,9 +39,9 @@
     owner: "{{ devcontainer_user }}"
     group: "{{ devcontainer_group }}"
   with_nested:
-    - [ "common", "designer", "gateway" ]
-    - [ "main", "test" ]
-    - [ "java/{{ project_organization | replace('.', '/') }}" ]
+    - ["common", "designer", "gateway"]
+    - ["main", "test"]
+    - ["java/{{ project_organization_as_path }}"]
 
 - name: Create Resources Scaffolding
   ansible.builtin.file:
@@ -43,13 +51,13 @@
     owner: "{{ devcontainer_user }}"
     group: "{{ devcontainer_group }}"
   with_nested:
-    - [ "common", "designer", "gateway" ]
-    - [ "main", "test" ]
+    - ["common", "designer", "gateway"]
+    - ["main", "test"]
 
 - name: Template out Hook Classes
   ansible.builtin.template:
     src: "{{ scope | title }}Hook.java.j2"
-    dest: "{{ workspace_root }}/{{ scope }}/src/main/java/{{ project_organization | replace('.', '/') }}/{{ scope }}/{{ module_hook_prefix }}{{ scope | title }}Hook.java"
+    dest: "{{ workspace_root }}/{{ scope }}/src/main/java/{{ project_organization_as_path }}/{{ scope }}/{{ module_hook_prefix }}{{ scope | title }}Hook.java"
     mode: 0644
     owner: "{{ devcontainer_user }}"
     group: "{{ devcontainer_group }}"

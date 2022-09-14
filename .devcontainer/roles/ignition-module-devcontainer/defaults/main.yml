@@ -1,6 +1,7 @@
 project_name: ignition-module-devcontainer
 project_description: A module that works with the Ignition Platform
 project_organization: org.example
+project_organization_as_path: "{{ project_organization | replace('.', '/') }}"
 module_id_suffix: SampleModule
 module_hook_prefix: Sample
 workspace_root: /workspace
@@ -8,3 +9,4 @@ required_ignition_version: 8.1.13
 required_framework_version: 8
 devcontainer_user: vscode
 devcontainer_group: "{{ devcontainer_user }}"
+initialization_marker_filepath: "{{ workspace_root }}/.init-complete"
