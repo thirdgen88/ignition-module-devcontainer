@@ -28,8 +28,7 @@ services:
   gateway:
     image: inductiveautomation/ignition:8.1.20
     ports:
-      - 8088
-      - 8000
+      - 18088:8088
     environment:
       GATEWAY_ADMIN_PASSWORD: password
       IGNITION_EDITION: standard
