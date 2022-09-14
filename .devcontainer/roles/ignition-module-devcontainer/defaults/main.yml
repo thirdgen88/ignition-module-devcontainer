@@ -1,12 +1,27 @@
+# Role Defaults file for Ignition Module Devcontainer Scaffolding
+---
+
+### Typical Customization Settings
+# --------------------------------------------------------------------- #
+# Project Name is loaded into the root settings.gradle.kts file
 project_name: ignition-module-devcontainer
+# This description will be shown in the Ignition Web UI
 project_description: A module that works with the Ignition Platform
+# This reverse domain name defines the unique namespace for the module
 project_organization: org.example
-project_organization_as_path: "{{ project_organization | replace('.', '/') }}"
+# This suffix joins with the organization above and is also the Module name
 module_id_suffix: SampleModule
+# This prefix will be used for the Hook script filenames
 module_hook_prefix: Sample
-workspace_root: /workspace
+# Required Ignition Version and Framework Version for the module
 required_ignition_version: 8.1.13
 required_framework_version: 8
+
+
+### Devcontainer-Specific Settings (leave these alone in most cases)
+# --------------------------------------------------------------------- #
+project_organization_as_path: "{{ project_organization | replace('.', '/') }}"
+workspace_root: /workspace
 devcontainer_user: vscode
 devcontainer_group: "{{ devcontainer_user }}"
 initialization_marker_filepath: "{{ workspace_root }}/.init-complete"
