@@ -12,24 +12,24 @@
     src: settings.gradle.kts.j2
     dest: "{{ workspace_root }}/settings.gradle.kts"
     mode: 0644
-    owner: vscode
-    group: vscode
+    owner: "{{ devcontainer_user }}"
+    group: "{{ devcontainer_group }}"
 
 - name: Template Gradle Build File
   ansible.builtin.template:
     src: build.gradle.kts.j2
     dest: "{{ workspace_root }}/build.gradle.kts"
     mode: 0644
-    owner: vscode
-    group: vscode
+    owner: "{{ devcontainer_user }}"
+    group: "{{ devcontainer_group }}"
 
 - name: Create Sources Scaffolding
   ansible.builtin.file:
     path: "{{ workspace_root }}/{{ item[0] }}/src/{{ item[1] }}/{{ item[2] }}/{{ item[0] }}"
     state: directory
     mode: 0755
-    owner: vscode
-    group: vscode
+    owner: "{{ devcontainer_user }}"
+    group: "{{ devcontainer_group }}"
   with_nested:
     - [ "common", "designer", "gateway" ]
     - [ "main", "test" ]
@@ -40,8 +40,8 @@
     path: "{{ workspace_root }}/{{ item[0] }}/src/{{ item[1] }}/resources"
     state: directory
     mode: 0755
-    owner: vscode
-    group: vscode
+    owner: "{{ devcontainer_user }}"
+    group: "{{ devcontainer_group }}"
   with_nested:
     - [ "common", "designer", "gateway" ]
     - [ "main", "test" ]
@@ -51,9 +51,23 @@
     src: "{{ scope | title }}Hook.java.j2"
     dest: "{{ workspace_root }}/{{ scope }}/src/main/java/{{ project_organization | replace('.', '/') }}/{{ scope }}/{{ module_hook_prefix }}{{ scope | title }}Hook.java"
     mode: 0644
-    owner: vscode
-    group: vscode
+    owner: "{{ devcontainer_user }}"
+    group: "{{ devcontainer_group }}"
   loop:
+    - "gateway"
+  loop_control:
+    loop_var: scope
+
+- name: Template out subproject build.gradle.kts files
+  ansible.builtin.template:
+    src: "{{ scope }}/build.gradle.kts.j2"
+    dest: "{{ workspace_root }}/{{ scope }}/build.gradle.kts"
+    mode: 0644
+    owner: "{{ devcontainer_user }}"
+    group: "{{ devcontainer_group }}"
+  loop:
+    - "common"
+    - "designer"
     - "gateway"
   loop_control:
     loop_var: scope

@@ -6,3 +6,5 @@ module_hook_prefix: Sample
 workspace_root: /workspace
 required_ignition_version: 8.1.13
 required_framework_version: 8
+devcontainer_user: vscode
+devcontainer_group: "{{ devcontainer_user }}"
