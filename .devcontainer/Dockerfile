@@ -2,7 +2,7 @@
 
 # [Choice] Java version (use -bullseye variants on local arm64/Apple Silicon): 11, 17, 11-bullseye, 17-bullseye, 11-buster, 17-buster
 ARG VARIANT="17-bullseye"
-FROM mcr.microsoft.com/vscode/devcontainers/java:0-${VARIANT}
+FROM mcr.microsoft.com/vscode/devcontainers/java:${VARIANT}
 
 # Install Node.js, version: none, lts/*, 16, 14, 12, 10
 ARG NODE_VERSION="none"

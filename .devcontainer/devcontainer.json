@@ -30,7 +30,7 @@
 				"java.import.gradle.wrapper.enabled": true,
 				"java.import.gradle.home": "/workspace",
 				// Java 17 used for the Java VSCode Language Server and Extensions
-				"java.jdt.ls.java.home": "/usr/lib/jvm/msopenjdk-17",
+				"java.jdt.ls.java.home": "/usr/lib/jvm/msopenjdk-current",
 				"java.configuration.runtimes": [
 					// Java 11 used for Ignition Module Build
 					{
