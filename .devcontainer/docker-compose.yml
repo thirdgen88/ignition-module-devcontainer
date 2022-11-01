@@ -26,7 +26,7 @@ services:
     command: /bin/sh -c "while sleep 1000; do :; done"
 
   gateway:
-    image: inductiveautomation/ignition:8.1.20
+    image: inductiveautomation/ignition:8.1.21
     ports:
       - 18088:8088
     environment:
