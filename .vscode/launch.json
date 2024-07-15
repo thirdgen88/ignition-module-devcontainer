@@ -1,0 +1,12 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Debug (Attach to Gateway)",
+            "request": "attach",
+            "hostName": "gateway",
+            "port": 8000
+        }
+    ]
+}

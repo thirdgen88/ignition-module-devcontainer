@@ -1,7 +1,6 @@
-// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
-// https://github.com/microsoft/vscode-dev-containers/tree/v0.245.0/containers/java
+// https://containers.dev/implementors/json_reference/
 {
-	"name": "Java",
+	"name": "Ignition Module Dev",
 
 	"dockerComposeFile": [
 		"docker-compose.yml"
@@ -10,10 +9,6 @@
 	"service": "devcontainer",
 
 	"workspaceFolder": "/workspace",
-
-	"runServices": [
-		"gateway"
-	],
 
 	"hostRequirements": {
 		"cpus": 2,
@@ -26,19 +21,9 @@
 		// Configure properties specific to VS Code.
 		"vscode": {
 			// Set *default* container specific settings.json values on container create.
-			"settings": { 
+			"settings": {
 				"java.import.gradle.wrapper.enabled": true,
-				"java.import.gradle.home": "/workspace",
-				// Java 17 used for the Java VSCode Language Server and Extensions
-				"java.jdt.ls.java.home": "/usr/lib/jvm/msopenjdk-current",
-				"java.configuration.runtimes": [
-					// Java 11 used for Ignition Module Build
-					{
-						"name": "JavaSE-11",
-						"path": "/usr/local/sdkman/candidates/java/current",
-						"default": true
-					}
-				]
+				"java.import.gradle.home": "/workspace"
 			},
 			
 			// Add the IDs of extensions you want installed when the container is created.
@@ -46,7 +31,6 @@
 				"vscjava.vscode-java-pack",
 				"vscjava.vscode-gradle",
 				"sonarsource.sonarlint-vscode",
-				"shengchen.vscode-checkstyle",
 				"mathiasfrohlich.kotlin",
 				// "k--kato.intellij-idea-keybindings",
 				"ms-azuretools.vscode-docker",
@@ -69,11 +53,27 @@
 		"onAutoForward": "ignore"
 	},
 
-	"onCreateCommand": "ansible-playbook .devcontainer/setup-devcontainer.yml",
+	"onCreateCommand": "VIRTUAL_ENV=\"/usr/local/py-utils/venvs/ansible\" PATH=\"$VIRTUAL_ENV/bin:$PATH\" ansible-playbook .devcontainer/setup-devcontainer.yml",
 
 	"remoteUser": "vscode",
 	
 	"features": {
-		"docker-from-docker": "latest"
+		"ghcr.io/devcontainers/features/common-utils:2": {
+			"configureZshAsDefaultShell": "true"
+		},
+		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
+			"version": "latest"
+		},
+		"ghcr.io/devcontainers/features/node:1": {
+			"version": "lts"
+		},
+		"ghcr.io/devcontainers/features/java:1": {
+			"version": "17.0.11",
+			"jdkDistro": "zulu"
+		},
+		"ghcr.io/devcontainers/features/python:1": {
+			"version": "os-provided",
+			"toolsToInstall": "ansible,ansible-lint"
+		}
 	}
 }

@@ -7,3 +7,6 @@
 # Ignore Gradle build output directory
 build
 bin
+
+# Other ignores
+.DS_Store
