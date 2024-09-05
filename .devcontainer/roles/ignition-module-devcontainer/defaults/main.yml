@@ -14,7 +14,7 @@ module_id_suffix: SampleModule
 # This prefix will be used for the Hook script filenames
 module_hook_prefix: Sample
 # Required Ignition Version and Framework Version for the module
-required_ignition_version: 8.1.42
+required_ignition_version: 8.1.43
 required_framework_version: 8
 
 
