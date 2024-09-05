@@ -68,7 +68,7 @@
 			"version": "lts"
 		},
 		"ghcr.io/devcontainers/features/java:1": {
-			"version": "17.0.11",
+			"version": "17",
 			"jdkDistro": "zulu"
 		},
 		"ghcr.io/devcontainers/features/python:1": {
